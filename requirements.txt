@@ -1,0 +1,2 @@
+Fabric==1.4.3
+junit-xml==1.0
