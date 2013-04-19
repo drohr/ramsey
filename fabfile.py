@@ -33,7 +33,7 @@ def ramsey():
 
         testCases = []
         for testCaseNumber in xrange(1, 46):
-            testCaseId = "FC0%d" % testCaseNumber
+            testCaseId = "FC%.3d" % testCaseNumber
             if testCaseId not in failedTestCases:
                 testCases.append(TestCase(testCaseId))
             else:
