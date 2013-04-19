@@ -9,14 +9,24 @@ from fabric.decorators import task
 def ramsey():
     """Run foodcritic and output the data as junit xml"""
 
-    junitfile = "junit.xml"
-    if os.path.exists(junitfile):
-        os.remove(junitfile)
+    outFile = "junit.xml"
+    cookbookPath = "cookbooks"
+
+    if not os.path.isdir(cookbookPath):
+        print "No valid cookbook found"
+        return
+
+    if not os.listdir(cookbookPath):
+        print "No valid cookbooks found"
+        return
+
+    if os.path.exists(outFile):
+        os.remove(outFile)
 
     testSuites = []
-    for cookbook in os.listdir('cookbooks'):
+    for cookbook in os.listdir(cookbookPath):
         timestamp = datetime.datetime.now()
-        cmd = "foodcritic cookbooks/%s" % cookbook
+        cmd = "foodcritic %s/%s" % (cookbookPath, cookbook)
         p = subprocess.Popen(shlex.split(cmd), stdout = subprocess.PIPE)
         result = p.communicate()[0]
 
@@ -43,6 +53,6 @@ def ramsey():
         print "Done with testcase for %s" % cookbook
 
     # output to file
-    with open(junitfile, 'w') as f:
+    with open(outFile, 'w') as f:
         TestSuite.to_file(f, testSuites, prettyprint=False)
 
